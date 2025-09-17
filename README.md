@@ -1,5 +1,7 @@
 # Postman API Lint Server
 
+![Demo](demo.gif)
+
 VS Code extension that runs Postman governance checks on your API specs in real-time. Issues show up directly in the Problems panel with line-precise positioning.
 
 ## What It Does
