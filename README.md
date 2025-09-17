@@ -11,14 +11,12 @@ Your API specifications get validated against Postman's governance rules as you 
 ## Prerequisites
 
 ```bash
-npm install -g @postman/cli
-postman login --with-api-key YOUR_API_KEY
-```
-
-Verify:
-```bash
-postman login status
-postman api lint --help
+## on MacOS/Linux
+curl -o- "https://dl-cli.pstmn.io/install/unix.sh" | sh
+## on Windows
+powershell.exe -NoProfile -InputFormat None -ExecutionPolicy AllSigned -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://dl-cli.pstmn.io/install/win64.ps1'))"
+## then...
+postman login
 ```
 
 ## Installation
@@ -32,9 +30,7 @@ npm run install:all
 npm run compile
 ```
 
-Press F5 in VS Code to launch the Extension Development Host.
-
-### From VSIX
+### From [VSIX](https://github.com/postman-cs/postman-vscode-lint/releases/tag/v0.1.0)
 
 ```bash
 code --install-extension postman-lint-server-0.1.0.vsix
@@ -56,7 +52,7 @@ VS Code settings:
 ```
 
 - **enable**: Turn extension on/off
-- **postmanCliPath**: Path to Postman CLI binary
+- **postmanCliPath**: Path to Postman CLI binary (set to the "postman" alias by default)
 - **lintOnSave**: Validate when files are saved
 - **lintOnChange**: Real-time validation as you type
 - **lintOnChangeDelay**: Debounce delay in ms for real-time mode
@@ -87,7 +83,7 @@ Via Command Palette (Ctrl+Shift+P):
 4. Maps violations to VS Code diagnostics
 5. Shows issues in Problems panel
 
-Uses Language Server Protocol for clean integration. Reads Postman CLI credentials from `~/.postman/postmanrc`.
+Uses Language Server Protocol for clean integration. Processes queries through your existing Postman CLI login rather than requiring an API key or authentication.
 
 ## Troubleshooting
 
@@ -156,8 +152,7 @@ npm run package        # Create VSIX
 
 ## Contributing
 
-This solves a real problem for API developers using Postman governance. Focus areas for contribution:
-- Error handling improvements
-- Performance optimization for large specs
-- Additional file format support
-- Postman workspace integration
+Focus areas for contribution:
+- Performance optimization for large specs (via chunking, ideally)
+- Tighter integration with the existing Postman VS Code Extension
+- [Collection/Workspace linting](https://github.com/postman-solutions-eng/PostmanLinter)
