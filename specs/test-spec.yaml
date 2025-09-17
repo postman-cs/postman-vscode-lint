@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  title: Test API
+  version: 1.0.0
+  # Missing description - should trigger governance warning
+paths:
+  /users:
+    get:
+      # Missing operationId - should trigger lint issue
+      summary: Get users
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: objects
+                  # Missing properties definition - should trigger validation error
+  /posts/{id}:
+    get:
+      operationId: getPost
+      summary: Get a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  content:
+                    type: string
+        '404':
+          description: Not found

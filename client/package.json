@@ -1,0 +1,171 @@
+{
+  "name": "postman-lint-server",
+  "displayName": "Postman API Lint Server",
+  "description": "Real-time API governance validation using Postman CLI",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "postman",
+    "api",
+    "openapi",
+    "swagger",
+    "linting",
+    "governance",
+    "validation"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml",
+    "onLanguage:json",
+    "workspaceContains:**/openapi.{yaml,yml,json}",
+    "workspaceContains:**/*.openapi.{yaml,yml,json}",
+    "workspaceContains:**/*-api.{yaml,yml,json}",
+    "workspaceContains:**/swagger.{yaml,yml,json}",
+    "workspaceContains:**/*.swagger.{yaml,yml,json}"
+  ],
+  "main": "./lib/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "openapi",
+        "aliases": [
+          "OpenAPI",
+          "openapi"
+        ],
+        "extensions": [
+          ".openapi.yaml",
+          ".openapi.yml",
+          ".openapi.json"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Postman Lint Server",
+      "properties": {
+        "postmanLintServer.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable the Postman linting functionality"
+        },
+        "postmanLintServer.postmanCliPath": {
+          "type": "string",
+          "default": "postman",
+          "description": "Path to the Postman CLI executable"
+        },
+        "postmanLintServer.lintOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Lint files when they are saved"
+        },
+        "postmanLintServer.lintOnChange": {
+          "type": "boolean",
+          "default": false,
+          "description": "Lint files as they are being edited (real-time). May impact performance on large files."
+        },
+        "postmanLintServer.lintOnChangeDelay": {
+          "type": "number",
+          "default": 500,
+          "minimum": 100,
+          "maximum": 5000,
+          "description": "Delay in milliseconds for real-time linting (debounce)"
+        },
+        "postmanLintServer.maxFileSize": {
+          "type": "number",
+          "default": 10485760,
+          "minimum": 1024,
+          "description": "Maximum file size in bytes to lint (default: 10MB)"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "postmanLintServer.lintCurrentFile",
+        "title": "Lint Current File",
+        "category": "Postman"
+      },
+      {
+        "command": "postmanLintServer.lintWorkspace",
+        "title": "Lint All OpenAPI Files in Workspace",
+        "category": "Postman"
+      },
+      {
+        "command": "postmanLintServer.checkAuthStatus",
+        "title": "Check Authentication Status",
+        "category": "Postman"
+      },
+      {
+        "command": "postmanLintServer.reloadConfig",
+        "title": "Reload Postman CLI Configuration",
+        "category": "Postman"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceExtname =~ /\\.(yaml|yml|json)$/",
+          "command": "postmanLintServer.lintCurrentFile",
+          "group": "postman@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "postmanLintServer.lintCurrentFile",
+          "when": "editorLangId == yaml || editorLangId == json"
+        },
+        {
+          "command": "postmanLintServer.lintWorkspace"
+        },
+        {
+          "command": "postmanLintServer.checkAuthStatus"
+        },
+        {
+          "command": "postmanLintServer.reloadConfig"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run webpack && npm run webpack:server",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "webpack": "webpack --mode production",
+    "webpack:server": "cd ../server && npx webpack --mode production && cp server.js* ../client/server/",
+    "webpack-dev": "webpack --mode development",
+    "clean": "rimraf lib",
+    "test": "jest",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^3.6.0",
+    "jest": "^29.0.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "postman-lint-server-shared": "file:../shared",
+    "vscode-jsonrpc": "^8.2.0",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver-protocol": "^3.17.5"
+  },
+  "publisher": "jaredboynton",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaredboynton/postman-lint-server"
+  },
+  "bugs": {
+    "url": "https://github.com/jaredboynton/postman-lint-server/issues"
+  },
+  "homepage": "https://github.com/jaredboynton/postman-lint-server#readme",
+  "license": "MIT"
+}
